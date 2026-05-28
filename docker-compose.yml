@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: smartscanner_mongo
+    environment:
+      MONGO_INITDB_DATABASE: smartscanner
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - smartscanner_network
+
+  api:
+    build: .
+    container_name: smartscanner_api
+    environment:
+      NODE_ENV: development
+      MONGODB_URI: mongodb://mongo:27017/smartscanner
+      JWT_SECRET: your_jwt_secret_key
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      FRONTEND_URL: http://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - smartscanner_network
+    command: npm run dev
+
+volumes:
+  mongo_data:
+
+networks:
+  smartscanner_network:
+    driver: bridge
