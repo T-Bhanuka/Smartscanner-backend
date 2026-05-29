@@ -16,7 +16,7 @@ import 'dart:convert';
 import 'storage_service.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://localhost:3000/api';
+  static const String baseUrl = 'http://localhost:3005/api';
   // For production: 'https://your-backend-domain.com/api'
 
   static Future<Map<String, dynamic>> _makeRequest(

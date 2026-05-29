@@ -26,7 +26,7 @@ services:
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
       FRONTEND_URL: http://localhost:8080
     ports:
-      - "3000:3000"
+      - "3005:3005"
     depends_on:
       - mongo
     volumes:

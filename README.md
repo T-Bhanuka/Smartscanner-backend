@@ -53,7 +53,7 @@ cp .env.example .env
 
 4. Update `.env` with your API keys and configuration:
 ```
-PORT=3000
+PORT=3005
 NODE_ENV=development
 MONGODB_URI=mongodb://localhost:27017/smartscanner
 JWT_SECRET=your_secure_secret_key
@@ -74,7 +74,7 @@ mongod
 npm run dev
 ```
 
-The API will be available at `http://localhost:3000`
+The API will be available at `http://localhost:3005`
 
 ### Docker Setup
 
@@ -85,7 +85,7 @@ The API will be available at `http://localhost:3000`
 docker-compose up --build
 ```
 
-The API will be available at `http://localhost:3000` and MongoDB at `localhost:27017`
+The API will be available at `http://localhost:3005` and MongoDB at `localhost:27017`
 
 ## API Endpoints
 
@@ -162,7 +162,7 @@ The API will be available at `http://localhost:3000` and MongoDB at `localhost:2
 ## Environment Variables
 
 ```
-PORT                      # Server port (default: 3000)
+PORT                      # Server port (default: 3005)
 NODE_ENV                  # Environment (development/production)
 MONGODB_URI               # MongoDB connection string
 JWT_SECRET                # JWT signing secret
@@ -205,7 +205,7 @@ GET /health
 Update your Flutter app's API configuration:
 
 ```dart
-const String apiBaseUrl = 'http://your-backend-url:3000/api';
+const String apiBaseUrl = 'http://your-backend-url:3005/api';
 ```
 
 ### Example API Call:

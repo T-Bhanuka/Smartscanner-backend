@@ -16,7 +16,7 @@ cp .env.example .env
 # 4. Start with Docker
 docker-compose up --build
 
-# Backend runs at: http://localhost:3000
+# Backend runs at: http://localhost:3005
 # MongoDB at: localhost:27017
 ```
 
@@ -41,7 +41,7 @@ mongod
 # 6. Start development server
 npm run dev
 
-# Backend runs at: http://localhost:3000
+# Backend runs at: http://localhost:3005
 ```
 
 ## 📋 API Endpoints Quick Reference
@@ -109,7 +109,7 @@ DELETE /api/social/:shareId          # Delete share
 
 ### Register User
 ```bash
-curl -X POST http://localhost:3000/api/auth/register \
+curl -X POST http://localhost:3005/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "name": "John Doe",
@@ -120,7 +120,7 @@ curl -X POST http://localhost:3000/api/auth/register \
 
 ### Login
 ```bash
-curl -X POST http://localhost:3000/api/auth/login \
+curl -X POST http://localhost:3005/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "john@example.com",
@@ -130,7 +130,7 @@ curl -X POST http://localhost:3000/api/auth/login \
 
 ### Analyze Receipt (after getting token)
 ```bash
-curl -X POST http://localhost:3000/api/receipts/analyze \
+curl -X POST http://localhost:3005/api/receipts/analyze \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -d '{
@@ -141,7 +141,7 @@ curl -X POST http://localhost:3000/api/receipts/analyze \
 
 ### Get Budget Health
 ```bash
-curl -X GET "http://localhost:3000/api/analytics/insights/budget-health?month=2024-01" \
+curl -X GET "http://localhost:3005/api/analytics/insights/budget-health?month=2024-01" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 

@@ -251,7 +251,7 @@ git push heroku main
 
 | Variable | Purpose | Example |
 |----------|---------|---------|
-| PORT | Server port | 3000 |
+| PORT | Server port | 3005 |
 | NODE_ENV | Environment | development |
 | MONGODB_URI | Database URL | mongodb://mongo:27017/smartscanner |
 | JWT_SECRET | Token signing | your_secure_key |
