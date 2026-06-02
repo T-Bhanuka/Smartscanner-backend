@@ -42,7 +42,10 @@ router.post('/analyze', authenticate, async (req, res) => {
       generationConfig: { responseMimeType: 'application/json' }
     });
 
-    const prompt = `Analyze this receipt image and extract the following information in JSON format:
+    const prompt = `Analyze this receipt image and extract the information.
+    IMPORTANT: If the receipt is in Sinhala (or contains Sinhala text), you MUST translate all text (such as the store name, item names, and categories) into English. All text values in the output JSON response must be in English. For example, translate store name 'කීල්ස්' to 'Keells', item 'පාන්' to 'Bread', 'කිරි' to 'Milk', etc.
+    
+    Extract the following information in JSON format:
     {
       "storeName": "store name",
       "date": "date if visible",
@@ -97,6 +100,42 @@ router.post('/analyze', authenticate, async (req, res) => {
     });
   } catch (error) {
     console.error('Error analyzing receipt:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Create custom/processed receipt directly
+router.post('/', authenticate, async (req, res) => {
+  try {
+    const { storeName, total, date, category, rawText, items } = req.body;
+
+    if (!storeName || total === undefined) {
+      return res.status(400).json({ error: 'storeName and total are required' });
+    }
+
+    const receipt = new Receipt({
+      userId: req.userId,
+      storeName,
+      total,
+      date: date ? new Date(date) : new Date(),
+      category: category || 'Other',
+      items: items || [],
+      analysisData: {
+        extractedText: rawText || ''
+      }
+    });
+
+    await receipt.save();
+
+    // Update budget spent, remaining, alerts, and categoryBreakdown
+    await Budget.updateBudgetForUserAndMonth(req.userId, receipt.date);
+
+    res.status(201).json({
+      message: 'Receipt saved successfully',
+      receipt
+    });
+  } catch (error) {
+    console.error('Error saving receipt:', error);
     res.status(500).json({ error: error.message });
   }
 });
