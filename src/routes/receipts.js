@@ -43,10 +43,14 @@ router.post('/analyze', authenticate, async (req, res) => {
     });
 
     const prompt = `Analyze this receipt image and extract the information.
-    IMPORTANT: If the receipt is in Sinhala (or contains Sinhala text), you MUST translate all text (such as the store name, item names, and categories) into English. All text values in the output JSON response must be in English. For example, translate store name 'කීල්ස්' to 'Keells', item 'පාන්' to 'Bread', 'කිරි' to 'Milk', etc.
+    IMPORTANT: 
+    1. First, check if the image is a valid, readable receipt (it should not be too blurry, too dark, or a completely different object/scene like a person, animal, landscape, room, etc.). If it is not a valid receipt, or is completely unreadable/blurry, you MUST set "isValidReceipt" to false and provide a descriptive, friendly error message in English in "errorMessage" explaining the issue (e.g. "The image is too blurry. Please upload a clearer photo." or "This image does not appear to be a receipt. Please upload a receipt image."). Otherwise, set "isValidReceipt" to true and leave "errorMessage" empty.
+    2. If the receipt is in Sinhala (or contains Sinhala text), you MUST translate all text (such as the store name, item names, and categories) into English. All text values in the output JSON response must be in English. For example, translate store name 'කීල්ස්' to 'Keells', item 'පාන්' to 'Bread', 'කිරි' to 'Milk', etc.
     
     Extract the following information in JSON format:
     {
+      "isValidReceipt": true or false,
+      "errorMessage": "Descriptive error message in English if not a valid/readable receipt, otherwise empty",
       "storeName": "store name",
       "date": "date if visible",
       "total": numeric total amount,
@@ -70,6 +74,10 @@ router.post('/analyze', authenticate, async (req, res) => {
     const analysisText = result.response.text();
     const cleanText = analysisText.replace(/```json|```/g, '').trim();
     const analysisData = JSON.parse(cleanText);
+
+    if (analysisData.isValidReceipt === false) {
+      return res.status(400).json({ error: analysisData.errorMessage || 'Invalid or unreadable receipt image. Please upload a clear photo.' });
+    }
 
     // Create receipt
     const receipt = new Receipt({
