@@ -22,6 +22,7 @@ app.use('/api/gallery', require('./routes/gallery'));
 app.use('/api/budget', require('./routes/budget'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/social', require('./routes/social'));
+app.use('/api/family', require('./routes/family'));
 
 // Health check
 app.get('/health', (req, res) => {
